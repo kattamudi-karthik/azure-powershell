@@ -191,6 +191,7 @@ namespace Microsoft.Azure.Commands.Profile
                 }
             }
 
+            AzureSession.Instance.SetProperty("currentEnvironment", Environment);
             _writeWarningEvent -= WriteWarningSender;
             _writeWarningEvent += WriteWarningSender;
             AzureSession.Instance.UnregisterComponent<EventHandler<StreamEventArgs>>(WriteWarningKey);

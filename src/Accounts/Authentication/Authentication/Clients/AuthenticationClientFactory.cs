@@ -151,10 +151,11 @@ namespace Microsoft.Azure.Commands.Common.Authentication.Authentication.Clients
             return true;
         }
 
-        public IEnumerable<IAccount> ListAccounts()
+        public IEnumerable<IAccount> ListAccounts(string authority = null)
         {
-            TracingAdapter.Information(string.Format("[AuthenticationClientFactory] Calling GetAccountsAsync"));
-            return CreatePublicClient()
+            TracingAdapter.Information(string.Format("[AuthenticationClientFactory] Calling GetAccountsAsync on {0}", authority ?? "AzureCloud"));
+            
+            return CreatePublicClient(authority: authority)
                     .GetAccountsAsync()
                     .ConfigureAwait(false).GetAwaiter().GetResult();
         }
@@ -192,7 +193,7 @@ namespace Microsoft.Azure.Commands.Common.Authentication.Authentication.Clients
                 catch
                 {
                     promptAction($"Unable to acquire token for tenant '{tenant}'.");
-                }
+                } 
             }
 
             return result;

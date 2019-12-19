@@ -673,7 +673,12 @@ namespace Microsoft.Azure.Commands.Common.Authentication.Models
         private void RefreshContextsFromCache()
         {
             var authenticationClientFactory = new SharedTokenCacheClientFactory();
-            var accounts = authenticationClientFactory.ListAccounts();
+            string authority = null;
+            if (AzureSession.Instance.GetProperty("currentEnvironment") != null)
+            {
+                authority = AzureEnvironment.PublicEnvironments.GetProperty(AzureSession.Instance.GetProperty("currentEnvironment")).ActiveDirectoryAuthority + "orgnizations";
+            }
+            var accounts = authenticationClientFactory.ListAccounts(authority);
             if (!accounts.Any())
             {
                 if (!Contexts.Any(c => c.Key != "Default" && c.Value.Account.Type == AzureAccount.AccountType.User))
