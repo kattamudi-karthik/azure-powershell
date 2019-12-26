@@ -178,6 +178,11 @@ namespace Microsoft.Azure.Commands.Profile
             }
         }
 
+        /// <summary>
+        /// This cmdlet should work even if there isn't a default context
+        /// </summary>
+        protected override bool RequireDefaultContext => false;
+
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
@@ -195,7 +200,7 @@ namespace Microsoft.Azure.Commands.Profile
             _writeWarningEvent -= WriteWarningSender;
             _writeWarningEvent += WriteWarningSender;
             AzureSession.Instance.UnregisterComponent<EventHandler<StreamEventArgs>>(WriteWarningKey);
-            AzureSession.Instance.RegisterComponent("WriteWarning", () => _writeWarningEvent);
+            AzureSession.Instance.RegisterComponent(WriteWarningKey, () => _writeWarningEvent);
         }
 
         private event EventHandler<StreamEventArgs> _writeWarningEvent;
